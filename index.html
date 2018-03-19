@@ -26,6 +26,8 @@
         
         <script>
                     var zombie_map;
+                    var tolerance;
+                    var old_position;
                     var all_markers = [];
                     var data = `43.66828743859137 -79.82727235418338 zombie.png
                                43.66832236171976 -79.82667690378207 zombie.png
@@ -47,6 +49,11 @@
                                 center: {lat: 43.667946, lng: -79.826583}
                             });
                             
+                        old_position = new google.maps.Marker({
+                            position: {lat: 43.667946, lng: -79.826583},
+                            map: zombie_map,
+                            icon: "player.png"
+                            });
                         
                         if(navigator.geolocation) {
                             navigator.geolocation.watchPosition(set_my_position);
@@ -55,6 +62,7 @@
                             alert("Geolocation doesn't work in your browser");
                         }
                         
+
                         
                         for(i=0; i<markers.length; i++) {
                             var marker_data = markers[i].trim(); 
@@ -71,12 +79,15 @@
                             });
                         
                             all_markers.push(marker);
+                    
+                            
                     }
 
                     
             }
             
             function set_my_position(position) {
+                old_position.setMap(null);
                 var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
         
                 var marker = new google.maps.Marker({
@@ -84,6 +95,13 @@
                     map: zombie_map,
                     icon: "player.png"
                 });
+                
+                old_position = marker;
+                for(var i=0; i< old_position.length; i++){
+                    document.write(old_position[i] + "<br>");
+                            
+                }
+                            
             }
 
         </script>
@@ -91,7 +109,7 @@
 
            
     <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCQr6qJv-kvgRvVO5EVfLquPCq1pzEsVfU&callback=initMap">
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCQr6qJv-kvgRvVO5EVfLquPCq1pzEsVfU&callback=initMap&libraries=geometry">
     </script>
 
     </body>
